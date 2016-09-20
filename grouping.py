@@ -4,7 +4,6 @@ import argparse
 import sys
 import re
 
-
 SAME_EMAIL = 'same_email'
 SAME_PHONE = 'same_phone'
 SAME_EMAIL_OR_PHONE = 'same_email_or_phone'
@@ -22,13 +21,14 @@ def normalize_phone(phone_number):
         return None
 
     if len(normalized_phone) == 10:
-        # Assume US phone number without country prefix "1"
+        # Assume US phone number missing country prefix "1"
         normalized_phone = ('1' + normalized_phone)
 
     return normalized_phone
 
 
 class PersonGrouper(object):
+    '''Implements logic for finding matching person records in a CSV input file.'''
     def __init__(self, matching_type, input_path, output_stream=sys.stdout):
         self.matching_type = matching_type
         self.input_path = input_path
@@ -40,6 +40,7 @@ class PersonGrouper(object):
         self.next_id = 1
 
     def process_file(self):
+        '''Processes entire input file'''
         with open(self.input_path, 'rU') as csvfile:
             # Parse input file header
             header_line = next(csvfile)
@@ -53,7 +54,7 @@ class PersonGrouper(object):
                 self.process_line(line)
 
     def parse_headers(self, header_line):
-        # Parse column headers
+        '''Parses column headers, identifying column indices of columns to match.'''
         headers = header_line.strip().split(',')
         for i in xrange(0, len(headers)):
             if self.matching_type == SAME_EMAIL or self.matching_type == SAME_EMAIL_OR_PHONE:
