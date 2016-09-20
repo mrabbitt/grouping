@@ -1,3 +1,5 @@
+![build status](https://travis-ci.org/mrabbitt/grouping.svg?branch=master)
+
 ## Instructions
 
 ### Prerequisites
